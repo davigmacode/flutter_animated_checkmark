@@ -31,10 +31,25 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool active = false;
+  bool _active = true;
+  bool _shrink = true;
+  bool _sharp = true;
+  Color? _color;
 
   void toggleActive() {
-    setState(() => active = !active);
+    setState(() => _active = !_active);
+  }
+
+  void toggleShrink() {
+    setState(() => _shrink = !_shrink);
+  }
+
+  void toggleSharp() {
+    setState(() => _sharp = !_sharp);
+  }
+
+  void setColor(Color color) {
+    setState(() => _color = color);
   }
 
   @override
@@ -48,17 +63,65 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             AnimatedCheckmark(
-              active: active,
-              weight: 20,
-              color: Theme.of(context).colorScheme.primary,
-              style: CheckmarkStyle.round,
-              size: const Size.square(100),
+              active: _active,
+              weight: _shrink ? 20 : 30,
+              size: _shrink ? const Size.square(100) : const Size.square(200),
+              color: _color,
+              style: _sharp ? CheckmarkStyle.sharp : CheckmarkStyle.round,
             ),
-            TextButton(
-              onPressed: toggleActive,
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                child: active ? const Text('Hide') : const Text('Show'),
+            const SizedBox(height: 10),
+            Wrap(
+              children: [
+                TextButton(
+                  onPressed: toggleActive,
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: _active ? const Text('Hide') : const Text('Show'),
+                  ),
+                ),
+                TextButton(
+                  onPressed: toggleShrink,
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child:
+                        _shrink ? const Text('Expand') : const Text('Shrink'),
+                  ),
+                ),
+                TextButton(
+                  onPressed: toggleSharp,
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: _sharp ? const Text('Round') : const Text('Sharp'),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Container(
+              width: 200,
+              alignment: Alignment.center,
+              child: GridView.builder(
+                shrinkWrap: true,
+                itemCount: Colors.primaries.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  mainAxisSpacing: 2,
+                  crossAxisSpacing: 2,
+                  crossAxisCount: 6,
+                ),
+                itemBuilder: (_, i) {
+                  final color = Colors.primaries[i];
+                  return Card(
+                    color: color,
+                    child: InkWell(
+                      onTap: () => setColor(color),
+                      child: AnimatedCheckmark(
+                        weight: 4,
+                        color: Colors.white70,
+                        active: _color == color,
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ],
