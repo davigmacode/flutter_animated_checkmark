@@ -14,7 +14,7 @@ class AnimatedCheckmark extends ImplicitlyAnimatedWidget {
     this.weight,
     this.style,
     this.size = Size.zero,
-    this.active = false,
+    this.active = true,
     Duration duration = const Duration(milliseconds: 200),
     Curve curve = Curves.linear,
   }) : super(
@@ -23,10 +23,35 @@ class AnimatedCheckmark extends ImplicitlyAnimatedWidget {
           curve: curve,
         );
 
+  /// Color of the checkmark.
+  ///
+  /// Changing triggers animation.
+  ///
+  /// Defaults to [Colors.black87].
   final Color? color;
+
+  /// Stroke width of the checkmark.
+  ///
+  /// Changing triggers animation.
+  ///
+  /// Defaults to 1.0.
   final double? weight;
+
+  /// Defaults to [CheckmarkStyle.sharp].
   final CheckmarkStyle? style;
+
+  /// Expand to parent if the value is [Size.zero].
+  ///
+  /// Changing triggers animation.
+  ///
+  /// Defaults to [Size.zero].
   final Size size;
+
+  /// Whether to show the checkmark.
+  ///
+  /// Changing triggers animation.
+  ///
+  /// Defaults to [true].
   final bool active;
 
   @override
@@ -36,24 +61,45 @@ class AnimatedCheckmark extends ImplicitlyAnimatedWidget {
 class AnimatedCheckmarkState
     extends AnimatedWidgetBaseState<AnimatedCheckmark> {
   Tween<double>? progress;
+  Tween<double>? weight;
+  SizeTween? size;
+  ColorTween? color;
 
   @override
   void forEachTween(TweenVisitor<dynamic> visitor) {
     progress = visitor(
       progress,
       widget.active ? 1.0 : 0.0,
-      (dynamic value) => Tween<double>(begin: value as double),
-    ) as Tween<double>;
+      (dynamic value) => Tween<double>(begin: value),
+    ) as Tween<double>?;
+
+    weight = visitor(
+      weight,
+      widget.weight,
+      (dynamic value) => Tween<double>(begin: value),
+    ) as Tween<double>?;
+
+    size = visitor(
+      size,
+      widget.size,
+      (dynamic value) => SizeTween(begin: value),
+    ) as SizeTween?;
+
+    color = visitor(
+      color,
+      widget.color,
+      (dynamic value) => ColorTween(begin: value),
+    ) as ColorTween?;
   }
 
   @override
   Widget build(BuildContext context) {
     return Checkmark(
       progress: progress?.evaluate(animation),
-      color: widget.color,
-      weight: widget.weight,
+      color: color?.evaluate(animation),
+      weight: weight?.evaluate(animation),
       style: widget.style,
-      size: widget.size,
+      size: size?.evaluate(animation) ?? widget.size,
     );
   }
 }
@@ -89,9 +135,16 @@ class CheckmarkPainter extends CustomPainter {
         weight = weight ?? 1.0,
         style = style ?? CheckmarkStyle.sharp;
 
+  /// Defaults to 1.0
   final double progress;
+
+  /// Defaults to [Colors.black87]
   final Color color;
+
+  /// Defaults to 1.0
   final double weight;
+
+  /// Defaults to [CheckmarkStyle.sharp]
   final CheckmarkStyle style;
 
   @override
