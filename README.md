@@ -6,7 +6,7 @@ Easy way to displaying, animating, and styling checkmark icon.
 
 ## Preview
 
-[![Preview](https://github.com/davigmacode/flutter_animated_checkmark/raw/master/media/preview.gif)](https://davigmacode.github.io/flutter_animated_checkmark)
+[![Preview](https://github.com/davigmacode/flutter_animated_checkmark/raw/main/media/preview.gif)](https://davigmacode.github.io/flutter_animated_checkmark)
 
 [Demo](https://davigmacode.github.io/flutter_animated_checkmark)
 
