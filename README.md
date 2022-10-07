@@ -1,39 +1,43 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+![Pub Version](https://img.shields.io/pub/v/animated_checkmark) ![GitHub](https://img.shields.io/github/license/davigmacode/flutter_animated_checkmark)
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
+<a href="https://www.buymeacoffee.com/davigmacode" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="195" height="55"></a>
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
+Easy way to displaying, animating, and styling checkmark icon.
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+## Preview
+
+[![Preview](https://github.com/davigmacode/flutter_animated_checkmark/raw/master/media/preview.gif)](https://davigmacode.github.io/flutter_animated_checkmark)
+
+[Demo](https://davigmacode.github.io/flutter_animated_checkmark)
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+* Animated show/hide by active flag or progress value.
+* Animated color, weight, and size.
+* Sharp or round style.
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+For a complete usage, please see the [example](https://pub.dev/packages/animated_checkmark#-example-tab-).
+
+To read more about classes and other references used by `animated_checkmark`, see the [API Reference](https://pub.dev/documentation/animated_checkmark/latest/).
 
 ```dart
-const like = 'sample';
+// animate by active flag
+AnimatedCheckmark(
+  active: true,
+  weight: 2,
+  size: const Size.square(12),
+  color: Colors.blue,
+  style: CheckmarkStyle.round,
+);
+
+// animate by progress value [0.0-1.0]
+Checkmark(
+  progress: 0.5,
+  weight: 2,
+  size: const Size.square(12),
+  color: Colors.blue,
+  style: CheckmarkStyle.round,
+);
 ```
-
-## Additional information
-
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
