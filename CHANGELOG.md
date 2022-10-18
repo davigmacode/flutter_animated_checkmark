@@ -1,3 +1,7 @@
+## 1.0.1
+
+* Change license.
+
 ## 1.0.0
 
 * Initial release.
