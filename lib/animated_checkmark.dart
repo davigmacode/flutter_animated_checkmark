@@ -7,9 +7,9 @@ class AnimatedCheckmark extends ImplicitlyAnimatedWidget {
     Key? key,
     this.color,
     this.weight,
-    this.size = Size.zero,
-    this.active = true,
+    this.size,
     this.rounded = false,
+    this.value = true,
     Duration duration = const Duration(milliseconds: 200),
     Curve curve = Curves.linear,
   }) : super(
@@ -29,27 +29,27 @@ class AnimatedCheckmark extends ImplicitlyAnimatedWidget {
   ///
   /// Changing triggers animation.
   ///
-  /// Defaults to 1.0.
+  /// Defaults to [size] divided to 5.
   final double? weight;
 
-  /// Expand to parent if the value is [Size.zero].
+  /// Expand to parent if the value is null.
   ///
   /// Changing triggers animation.
   ///
-  /// Defaults to [Size.zero].
-  final Size size;
+  /// Defaults to parent size.
+  final double? size;
+
+  /// Whether the checkmark rounded or sharpen.
+  ///
+  /// Defaults to [false].
+  final bool rounded;
 
   /// Whether to show the checkmark.
   ///
   /// Changing triggers animation.
   ///
   /// Defaults to [true].
-  final bool active;
-
-  /// Whether the checkmark rounded or sharpen.
-  ///
-  /// Defaults to [false].
-  final bool rounded;
+  final bool? value;
 
   @override
   AnimatedCheckmarkState createState() => AnimatedCheckmarkState();
@@ -59,14 +59,18 @@ class AnimatedCheckmarkState
     extends AnimatedWidgetBaseState<AnimatedCheckmark> {
   Tween<double>? progress;
   Tween<double>? weight;
-  SizeTween? size;
+  Tween<double?>? size;
   ColorTween? color;
 
   @override
   void forEachTween(TweenVisitor<dynamic> visitor) {
     progress = visitor(
       progress,
-      widget.active ? 1.0 : 0.0,
+      widget.value == null
+          ? -1.0
+          : widget.value == true
+              ? 1.0
+              : 0.0,
       (dynamic value) => Tween<double>(begin: value),
     ) as Tween<double>?;
 
@@ -79,8 +83,8 @@ class AnimatedCheckmarkState
     size = visitor(
       size,
       widget.size,
-      (dynamic value) => SizeTween(begin: value),
-    ) as SizeTween?;
+      (dynamic value) => Tween<double?>(begin: value),
+    ) as Tween<double?>?;
 
     color = visitor(
       color,
@@ -95,7 +99,7 @@ class AnimatedCheckmarkState
       progress: progress?.evaluate(animation),
       color: color?.evaluate(animation),
       weight: weight?.evaluate(animation),
-      size: size?.evaluate(animation) ?? widget.size,
+      size: size?.evaluate(animation),
       rounded: widget.rounded,
     );
   }
@@ -108,14 +112,14 @@ class Checkmark extends CustomPaint {
     Color? color,
     double? weight,
     bool? rounded,
-    Size size = Size.zero,
+    double? size,
   }) : super(
           key: key,
-          size: size,
+          size: size != null ? Size.square(size) : Size.zero,
           painter: CheckmarkPainter(
             progress: progress,
             color: color,
-            weight: weight,
+            weight: weight ?? (size != null ? size / 5 : 0),
             rounded: rounded,
           ),
         );
@@ -154,7 +158,22 @@ class CheckmarkPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    assert(progress >= 0.0 && progress <= 1.0);
+    assert(progress >= -1.0 && progress <= 1.0);
+    final Paint paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..color = color
+      ..strokeJoin = rounded ? StrokeJoin.round : StrokeJoin.miter
+      ..strokeCap = !rounded || progress == 0 ? StrokeCap.butt : StrokeCap.round
+      ..strokeWidth = weight;
+
+    if (progress > 0) {
+      _drawCheck(canvas, size, paint);
+    } else {
+      _drawDash(canvas, size, paint);
+    }
+  }
+
+  void _drawCheck(Canvas canvas, Size size, Paint paint) {
     // As t goes from 0.0 to 1.0, animate the two check mark strokes from the
     // short side to the long side.
     const origin = Offset(0, 0);
@@ -174,12 +193,20 @@ class CheckmarkPainter extends CustomPainter {
       path.lineTo(origin.dx + mid.dx, origin.dy + mid.dy);
       path.lineTo(origin.dx + drawEnd.dx, origin.dy + drawEnd.dy);
     }
-    final Paint paint = Paint()
-      ..style = PaintingStyle.stroke
-      ..color = color
-      ..strokeJoin = rounded ? StrokeJoin.round : StrokeJoin.miter
-      ..strokeCap = !rounded || progress == 0 ? StrokeCap.butt : StrokeCap.round
-      ..strokeWidth = weight;
     canvas.drawPath(path, paint);
+  }
+
+  void _drawDash(Canvas canvas, Size size, Paint paint) {
+    // As t goes from 0.0 to -1.0,
+    // animate the horizontal line
+    // from the mid point outwards.
+    final center = size.center(Offset.zero);
+    final width = size.width;
+    final start = Offset(width * 0.15, center.dy);
+    final mid = Offset(width * 0.5, center.dy);
+    final end = Offset(width * 0.85, center.dy);
+    final drawStart = Offset.lerp(start, mid, 1.0 - (-progress))!;
+    final drawEnd = Offset.lerp(mid, end, -progress)!;
+    canvas.drawLine(drawStart, drawEnd, paint);
   }
 }
