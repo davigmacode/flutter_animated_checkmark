@@ -2,19 +2,14 @@ library animated_checkmark;
 
 import 'package:flutter/widgets.dart';
 
-enum CheckmarkStyle {
-  round,
-  sharp,
-}
-
 class AnimatedCheckmark extends ImplicitlyAnimatedWidget {
   const AnimatedCheckmark({
     Key? key,
     this.color,
     this.weight,
-    this.style,
     this.size = Size.zero,
     this.active = true,
+    this.rounded = false,
     Duration duration = const Duration(milliseconds: 200),
     Curve curve = Curves.linear,
   }) : super(
@@ -37,9 +32,6 @@ class AnimatedCheckmark extends ImplicitlyAnimatedWidget {
   /// Defaults to 1.0.
   final double? weight;
 
-  /// Defaults to [CheckmarkStyle.sharp].
-  final CheckmarkStyle? style;
-
   /// Expand to parent if the value is [Size.zero].
   ///
   /// Changing triggers animation.
@@ -53,6 +45,11 @@ class AnimatedCheckmark extends ImplicitlyAnimatedWidget {
   ///
   /// Defaults to [true].
   final bool active;
+
+  /// Whether the checkmark rounded or sharpen.
+  ///
+  /// Defaults to [false].
+  final bool rounded;
 
   @override
   AnimatedCheckmarkState createState() => AnimatedCheckmarkState();
@@ -98,8 +95,8 @@ class AnimatedCheckmarkState
       progress: progress?.evaluate(animation),
       color: color?.evaluate(animation),
       weight: weight?.evaluate(animation),
-      style: widget.style,
       size: size?.evaluate(animation) ?? widget.size,
+      rounded: widget.rounded,
     );
   }
 }
@@ -110,7 +107,7 @@ class Checkmark extends CustomPaint {
     double? progress,
     Color? color,
     double? weight,
-    CheckmarkStyle? style,
+    bool? rounded,
     Size size = Size.zero,
   }) : super(
           key: key,
@@ -119,7 +116,7 @@ class Checkmark extends CustomPaint {
             progress: progress,
             color: color,
             weight: weight,
-            style: style,
+            rounded: rounded,
           ),
         );
 }
@@ -129,11 +126,11 @@ class CheckmarkPainter extends CustomPainter {
     double? progress,
     Color? color,
     double? weight,
-    CheckmarkStyle? style,
+    bool? rounded,
   })  : progress = progress ?? 1.0,
         color = color ?? const Color(0xDD000000),
         weight = weight ?? 1.0,
-        style = style ?? CheckmarkStyle.sharp;
+        rounded = rounded ?? false;
 
   /// Defaults to 1.0
   final double progress;
@@ -144,14 +141,15 @@ class CheckmarkPainter extends CustomPainter {
   /// Defaults to 1.0
   final double weight;
 
-  /// Defaults to [CheckmarkStyle.sharp]
-  final CheckmarkStyle style;
+  /// Defaults to false
+  final bool rounded;
 
   @override
   bool shouldRepaint(CheckmarkPainter oldDelegate) {
     return oldDelegate.progress != progress ||
         oldDelegate.color != color ||
-        oldDelegate.weight != weight;
+        oldDelegate.weight != weight ||
+        oldDelegate.rounded != rounded;
   }
 
   @override
@@ -176,13 +174,11 @@ class CheckmarkPainter extends CustomPainter {
       path.lineTo(origin.dx + mid.dx, origin.dy + mid.dy);
       path.lineTo(origin.dx + drawEnd.dx, origin.dy + drawEnd.dy);
     }
-    final bool isSharped = style == CheckmarkStyle.sharp;
     final Paint paint = Paint()
       ..style = PaintingStyle.stroke
       ..color = color
-      ..strokeJoin = isSharped ? StrokeJoin.miter : StrokeJoin.round
-      ..strokeCap =
-          isSharped || progress == 0 ? StrokeCap.butt : StrokeCap.round
+      ..strokeJoin = rounded ? StrokeJoin.round : StrokeJoin.miter
+      ..strokeCap = !rounded || progress == 0 ? StrokeCap.butt : StrokeCap.round
       ..strokeWidth = weight;
     canvas.drawPath(path, paint);
   }
