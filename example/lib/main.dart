@@ -31,25 +31,25 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool _active = true;
-  bool _shrink = true;
-  bool _sharp = true;
+  double _size = 50;
+  bool? _active = true;
+  bool _rounded = true;
   Color? _color;
 
-  void toggleActive() {
-    setState(() => _active = !_active);
+  void setActive(bool? value) {
+    setState(() => _active = value);
   }
 
-  void toggleShrink() {
-    setState(() => _shrink = !_shrink);
-  }
-
-  void toggleSharp() {
-    setState(() => _sharp = !_sharp);
+  void setRounded(bool value) {
+    setState(() => _rounded = value);
   }
 
   void setColor(Color color) {
     setState(() => _color = color);
+  }
+
+  void setSize(double size) {
+    setState(() => _size = size);
   }
 
   @override
@@ -63,36 +63,57 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             AnimatedCheckmark(
-              active: _active,
-              weight: _shrink ? 20 : 30,
-              size: _shrink ? const Size.square(100) : const Size.square(200),
+              value: _active,
+              size: _size,
               color: _color,
-              style: _sharp ? CheckmarkStyle.sharp : CheckmarkStyle.round,
+              rounded: _rounded,
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              width: 250,
+              child: Slider(
+                value: _size,
+                max: 200,
+                min: 10,
+                label: _size.round().toString(),
+                onChanged: setSize,
+              ),
             ),
             const SizedBox(height: 10),
             Wrap(
+              spacing: 5,
               children: [
-                TextButton(
-                  onPressed: toggleActive,
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 300),
-                    child: _active ? const Text('Hide') : const Text('Show'),
-                  ),
+                OutlinedButton(
+                  onPressed: () {
+                    setActive(true);
+                  },
+                  child: const Text('CHECK'),
                 ),
-                TextButton(
-                  onPressed: toggleShrink,
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 300),
-                    child:
-                        _shrink ? const Text('Expand') : const Text('Shrink'),
-                  ),
+                OutlinedButton(
+                  onPressed: () {
+                    setActive(false);
+                  },
+                  child: const Text('UNCHECK'),
                 ),
-                TextButton(
-                  onPressed: toggleSharp,
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 300),
-                    child: _sharp ? const Text('Round') : const Text('Sharp'),
-                  ),
+                OutlinedButton(
+                  onPressed: () {
+                    setActive(null);
+                  },
+                  child: const Text('UNDETERMINED'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 5,
+              children: [
+                OutlinedButton(
+                  onPressed: () => setRounded(true),
+                  child: const Text('ROUNDED'),
+                ),
+                OutlinedButton(
+                  onPressed: () => setRounded(false),
+                  child: const Text('SHARPEN'),
                 ),
               ],
             ),
@@ -117,7 +138,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: AnimatedCheckmark(
                         weight: 4,
                         color: Colors.white70,
-                        active: _color == color,
+                        value: _color == color,
                       ),
                     ),
                   );
