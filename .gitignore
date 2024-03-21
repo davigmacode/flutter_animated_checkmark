@@ -8,7 +8,6 @@
 .buildlog/
 .history
 .svn/
-.fvm/flutter_sdk
 migrate_working_dir/
 
 # IntelliJ related
@@ -28,3 +27,6 @@ migrate_working_dir/
 **/doc/api/
 .dart_tool/
 .packages
+
+# FVM Version Cache
+.fvm/

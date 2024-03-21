@@ -1,3 +1,7 @@
+## 2.0.1
+
+* Removed screenshots and example from package archive
+
 ## 2.0.0
 
 * Replaced the `style` enumeration with a simpler `rounded` boolean property.
