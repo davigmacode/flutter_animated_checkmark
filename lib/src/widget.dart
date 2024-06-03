@@ -15,19 +15,15 @@ class AnimatedCheckmark extends ImplicitlyAnimatedWidget {
   /// The [duration] defaults to 200 milliseconds, [curve] defaults to [Curves.linear],
   /// [rounded] defaults to `false`, and [value] defaults to `true`.
   const AnimatedCheckmark({
-    Key? key,
+    super.key,
+    super.duration = const Duration(milliseconds: 200),
+    super.curve = Curves.linear,
     this.color,
     this.weight,
     this.size,
     this.rounded = false,
     this.value = true,
-    Duration duration = const Duration(milliseconds: 200),
-    Curve curve = Curves.linear,
-  }) : super(
-          key: key,
-          duration: duration,
-          curve: curve,
-        );
+  });
 
   /// The color of the checkmark.
   ///
