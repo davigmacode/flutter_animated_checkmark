@@ -1,6 +1,14 @@
 import 'package:flutter/widgets.dart';
 
+/// A [CustomPainter] that paints a checkmark on a canvas.
+///
+/// The [CheckmarkPainter] class is responsible for drawing the checkmark
+/// with the given properties, such as progress, color, weight, and roundness.
 class CheckmarkPainter extends CustomPainter {
+  /// Creates a [CheckmarkPainter] for painting a checkmark on a canvas.
+  ///
+  /// The [progress], [color], [weight], and [rounded] parameters
+  /// allow customization of the checkmark's appearance.
   CheckmarkPainter({
     double? progress,
     Color? color,
@@ -11,16 +19,24 @@ class CheckmarkPainter extends CustomPainter {
         weight = weight ?? 1.0,
         rounded = rounded ?? false;
 
-  /// Defaults to 1.0
+  /// The progress of the checkmark animation.
+  ///
+  /// Defaults to `1.0`.
   final double progress;
 
-  /// Defaults to [Colors.black87]
+  /// The color of the checkmark.
+  ///
+  /// Defaults to [Colors.black87].
   final Color color;
 
-  /// Defaults to 1.0
+  /// The stroke width of the checkmark.
+  ///
+  /// Defaults to `1.0`.
   final double weight;
 
-  /// Defaults to false
+  /// Whether the checkmark has rounded edges.
+  ///
+  /// Defaults to `false`.
   final bool rounded;
 
   @override

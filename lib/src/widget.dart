@@ -1,7 +1,19 @@
 import 'package:flutter/widgets.dart';
 import 'painter.dart';
 
+/// A widget that animates a checkmark.
+///
+/// The checkmark's properties, such as color, weight, size, and roundness,
+/// can be animated over a given duration and curve.
 class AnimatedCheckmark extends ImplicitlyAnimatedWidget {
+  /// Creates an [AnimatedCheckmark] widget.
+  ///
+  /// The [duration] and [curve] parameters control the animation of the checkmark's properties.
+  /// The [color], [weight], [size], [rounded], and [value] parameters allow customization of
+  /// the checkmark's appearance.
+  ///
+  /// The [duration] defaults to 200 milliseconds, [curve] defaults to [Curves.linear],
+  /// [rounded] defaults to `false`, and [value] defaults to `true`.
   const AnimatedCheckmark({
     Key? key,
     this.color,
@@ -17,37 +29,29 @@ class AnimatedCheckmark extends ImplicitlyAnimatedWidget {
           curve: curve,
         );
 
-  /// Color of the checkmark.
-  ///
-  /// Changing triggers animation.
+  /// The color of the checkmark.
   ///
   /// Defaults to [Colors.black87].
   final Color? color;
 
-  /// Stroke width of the checkmark.
+  /// The stroke width of the checkmark.
   ///
-  /// Changing triggers animation.
-  ///
-  /// Defaults to [size] divided to 5.
+  /// Defaults to [size] divided by 5.
   final double? weight;
 
-  /// Expand to parent if the value is null.
-  ///
-  /// Changing triggers animation.
+  /// The size of the checkmark. If null, the checkmark expands to fit its parent.
   ///
   /// Defaults to parent size.
   final double? size;
 
-  /// Whether the checkmark rounded or sharpen.
+  /// Whether the checkmark has rounded edges.
   ///
-  /// Defaults to [false].
+  /// Defaults to `false`.
   final bool rounded;
 
   /// Whether to show the checkmark.
   ///
-  /// Changing triggers animation.
-  ///
-  /// Defaults to [true].
+  /// Defaults to `true`.
   final bool? value;
 
   @override
@@ -104,7 +108,15 @@ class AnimatedCheckmarkState
   }
 }
 
+/// A widget that draws a checkmark on a [CustomPaint].
+///
+/// The [Checkmark] widget provides a customizable checkmark that can be used
+/// within any layout. It leverages a [CustomPainter] to render the checkmark.
 class Checkmark extends CustomPaint {
+  /// Creates a [Checkmark] widget.
+  ///
+  /// The [progress], [color], [weight], [rounded], and [size] parameters
+  /// allow customization of the checkmark's appearance.
   Checkmark({
     Key? key,
     double? progress,
