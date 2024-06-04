@@ -31,6 +31,7 @@ dependencies:
     sdk: flutter
   animated_checkmark:
     path: ../
+  wx_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:

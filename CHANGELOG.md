@@ -1,3 +1,12 @@
+## 2.1.0
+
+* Improved api doc
+* Improved animated default value
+* Updated sdk constraints
+* Split into src files
+* Update workspace flutter version to 3.22
+* Added loader and wasm build for example web page
+
 ## 2.0.1
 
 * Removed screenshots and example from package archive

@@ -1,6 +1,6 @@
 name: animated_checkmark
 description: Easy way to displaying, animating, and styling checkmark icon.
-version: 2.0.1
+version: 2.1.0
 homepage: https://davigmacode.github.io/flutter_animated_checkmark
 repository: https://github.com/davigmacode/flutter_animated_checkmark
 
