@@ -50,6 +50,16 @@ class AnimatedCheckmark extends ImplicitlyAnimatedWidget {
   /// Defaults to `true`.
   final bool? value;
 
+  /// The effective color of the checkmark.
+  ///
+  /// This is either the value of [color] or [Colors.black87] if [color] is null.
+  Color get effectiveColor => color ?? const Color(0xDD000000);
+
+  /// The effective stroke width of the checkmark.
+  ///
+  /// This is either the value of [weight] or [size] divided by 5 if [weight] is null.
+  double get effectiveWeight => weight ?? (size != null ? size! / 5 : 0);
+
   @override
   AnimatedCheckmarkState createState() => AnimatedCheckmarkState();
 }
@@ -75,7 +85,7 @@ class AnimatedCheckmarkState
 
     weight = visitor(
       weight,
-      widget.weight,
+      widget.effectiveWeight,
       (dynamic value) => Tween<double>(begin: value),
     ) as Tween<double>?;
 
@@ -87,7 +97,7 @@ class AnimatedCheckmarkState
 
     color = visitor(
       color,
-      widget.color,
+      widget.effectiveColor,
       (dynamic value) => ColorTween(begin: value),
     ) as ColorTween?;
   }
