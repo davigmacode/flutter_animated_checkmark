@@ -127,17 +127,19 @@ class CheckmarkPainter extends CustomPainter {
     final t = 1 - progress.abs();
 
     // Draw the \ line
+    final centerPoint = size.center(Offset.zero);
     final startPointTop = Offset(size.width - inset, size.height - inset);
     final endPointBottom = Offset(inset, inset);
-    final drawEndPointBottom = Offset.lerp(startPointTop, endPointBottom, t)!;
-    canvas.drawLine(startPointTop, drawEndPointBottom, paint);
+    final lerpStartPointTop = Offset.lerp(centerPoint, startPointTop, t)!;
+    final lerpEndPointBottom = Offset.lerp(centerPoint, endPointBottom, t)!;
+    canvas.drawLine(lerpStartPointTop, lerpEndPointBottom, paint);
 
     if (t > .5) {
       // Draw the / line
       final startPointBottom = Offset(size.width - inset, inset);
       final endPointTop = Offset(inset, size.height - inset);
-      final drawEndPointTop = Offset.lerp(startPointBottom, endPointTop, t)!;
-      canvas.drawLine(startPointBottom, drawEndPointTop, paint);
+      final lerpEndPointTop = Offset.lerp(startPointBottom, endPointTop, t)!;
+      canvas.drawLine(startPointBottom, lerpEndPointTop, paint);
     }
   }
 }
