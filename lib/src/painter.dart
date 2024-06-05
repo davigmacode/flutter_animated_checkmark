@@ -14,9 +14,13 @@ class CheckmarkPainter extends CustomPainter {
     Color? color,
     double? weight,
     bool? rounded,
+    bool? drawCross,
+    bool? drawDash,
   })  : progress = progress ?? 1.0,
         color = color ?? const Color(0xDD000000),
         weight = weight ?? 1.0,
+        drawCross = drawCross ?? false,
+        drawDash = drawDash ?? true,
         rounded = rounded ?? false;
 
   /// The progress of the checkmark animation.
@@ -39,12 +43,24 @@ class CheckmarkPainter extends CustomPainter {
   /// Defaults to `false`.
   final bool rounded;
 
+  /// Whether to draw a cross when progress reach `0`.
+  ///
+  /// Defaults to `false`.
+  final bool drawCross;
+
+  /// Whether to draw a dash when progress reach `-1`.
+  ///
+  /// Defaults to `true`.
+  final bool drawDash;
+
   @override
   bool shouldRepaint(CheckmarkPainter oldDelegate) {
     return oldDelegate.progress != progress ||
         oldDelegate.color != color ||
         oldDelegate.weight != weight ||
-        oldDelegate.rounded != rounded;
+        oldDelegate.rounded != rounded ||
+        oldDelegate.drawCross != drawCross ||
+        oldDelegate.drawDash != drawDash;
   }
 
   @override
@@ -54,13 +70,17 @@ class CheckmarkPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..color = color
       ..strokeJoin = rounded ? StrokeJoin.round : StrokeJoin.miter
-      ..strokeCap = !rounded || progress == 0 ? StrokeCap.butt : StrokeCap.round
+      ..strokeCap = !rounded ? StrokeCap.butt : StrokeCap.round
       ..strokeWidth = weight;
 
     if (progress > 0) {
       _drawCheck(canvas, size, paint);
-    } else {
-      _drawDash(canvas, size, paint);
+    } else if (progress < 0) {
+      if (drawDash) _drawDash(canvas, size, paint);
+    }
+
+    if (drawCross && progress > -1 && progress < 1) {
+      _drawCross(canvas, size, paint);
     }
   }
 
@@ -96,8 +116,28 @@ class CheckmarkPainter extends CustomPainter {
     final start = Offset(width * 0.15, center.dy);
     final mid = Offset(width * 0.5, center.dy);
     final end = Offset(width * 0.85, center.dy);
-    final drawStart = Offset.lerp(start, mid, 1.0 - (-progress))!;
+    final drawStart = Offset.lerp(start, mid, 1.0 + progress)!;
     final drawEnd = Offset.lerp(mid, end, -progress)!;
     canvas.drawLine(drawStart, drawEnd, paint);
+  }
+
+  void _drawCross(Canvas canvas, Size size, Paint paint) {
+    // Calculate inset based on size and ratio
+    final inset = (size.width / 2) * .4;
+    final t = 1 - progress.abs();
+
+    // Draw the \ line
+    final startPointTop = Offset(size.width - inset, size.height - inset);
+    final endPointBottom = Offset(inset, inset);
+    final drawEndPointBottom = Offset.lerp(startPointTop, endPointBottom, t)!;
+    canvas.drawLine(startPointTop, drawEndPointBottom, paint);
+
+    if (t > .5) {
+      // Draw the / line
+      final startPointBottom = Offset(size.width - inset, inset);
+      final endPointTop = Offset(inset, size.height - inset);
+      final drawEndPointTop = Offset.lerp(startPointBottom, endPointTop, t)!;
+      canvas.drawLine(startPointBottom, drawEndPointTop, paint);
+    }
   }
 }

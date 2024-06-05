@@ -22,6 +22,8 @@ class AnimatedCheckmark extends ImplicitlyAnimatedWidget {
     this.weight,
     this.size,
     this.rounded = false,
+    this.drawCross = false,
+    this.drawDash = true,
     this.value = true,
   });
 
@@ -44,6 +46,16 @@ class AnimatedCheckmark extends ImplicitlyAnimatedWidget {
   ///
   /// Defaults to `false`.
   final bool rounded;
+
+  /// Whether to draw a cross when [value] is `false`.
+  ///
+  /// Defaults to `false`.
+  final bool drawCross;
+
+  /// Whether to draw a dash when [value] is `null`.
+  ///
+  /// Defaults to `true`.
+  final bool drawDash;
 
   /// Whether to show the checkmark.
   ///
@@ -70,6 +82,12 @@ class AnimatedCheckmarkState
   Tween<double>? weight;
   Tween<double?>? size;
   ColorTween? color;
+
+  bool? oldValue = true;
+
+  bool get edgeToEdge =>
+      (widget.value == true && oldValue == null) ||
+      (widget.value == null && oldValue == true);
 
   @override
   void forEachTween(TweenVisitor<dynamic> visitor) {
@@ -103,6 +121,12 @@ class AnimatedCheckmarkState
   }
 
   @override
+  void didUpdateWidget(covariant AnimatedCheckmark oldWidget) {
+    oldValue = oldWidget.value;
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Checkmark(
       progress: progress?.evaluate(animation),
@@ -110,6 +134,8 @@ class AnimatedCheckmarkState
       weight: weight?.evaluate(animation),
       size: size?.evaluate(animation),
       rounded: widget.rounded,
+      drawCross: widget.drawCross && !edgeToEdge,
+      drawDash: widget.drawDash,
     );
   }
 }
@@ -129,6 +155,8 @@ class Checkmark extends CustomPaint {
     Color? color,
     double? weight,
     bool? rounded,
+    bool? drawCross,
+    bool? drawDash,
     double? size,
   }) : super(
           key: key,
@@ -138,6 +166,8 @@ class Checkmark extends CustomPaint {
             color: color,
             weight: weight ?? (size != null ? size / 5 : 0),
             rounded: rounded,
+            drawCross: drawCross,
+            drawDash: drawDash,
           ),
         );
 }
