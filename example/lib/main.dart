@@ -32,7 +32,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   double _size = 50;
   bool? _active = true;
-  bool _rounded = true;
+  bool _rounded = false;
+  bool _drawCross = false;
+  bool _drawDash = true;
   Color? _color;
 
   void setActive(bool? value) {
@@ -41,6 +43,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void setRounded(bool value) {
     setState(() => _rounded = value);
+  }
+
+  void setDrawCross(bool value) {
+    setState(() => _drawCross = value);
+  }
+
+  void setDrawDash(bool value) {
+    setState(() => _drawDash = value);
   }
 
   void setColor(Color color) {
@@ -62,16 +72,32 @@ class _MyHomePageState extends State<MyHomePage> {
               const Padding(
                 padding: EdgeInsets.fromLTRB(0, 50, 0, 35),
                 child: Center(
-                  child: WxText.displaySmall('AnimatedCheckmark'),
+                  child: WxText.displayMedium(
+                    'AnimatedCheckmark',
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.green,
+                        Colors.blue,
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: -2,
+                  ),
                 ),
               ),
               ColoredBox(
                 color: Colors.yellow.shade100,
                 child: AnimatedCheckmark(
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.linear,
                   value: _active,
                   size: _size,
                   color: _color,
                   rounded: _rounded,
+                  drawCross: _drawCross,
+                  drawDash: _drawDash,
                 ),
               ),
               const SizedBox(height: 20),
@@ -87,39 +113,68 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               const SizedBox(height: 20),
               Wrap(
-                spacing: 5,
+                spacing: 10,
                 children: [
-                  OutlinedButton(
-                    onPressed: () {
-                      setActive(true);
-                    },
-                    child: const Text('CHECK'),
+                  StackedCheckmark(
+                    value: _active == true,
+                    child: OutlinedButton(
+                      onPressed: () => setActive(true),
+                      child: const Text('CHECK'),
+                    ),
                   ),
-                  OutlinedButton(
-                    onPressed: () {
-                      setActive(false);
-                    },
-                    child: const Text('UNCHECK'),
+                  StackedCheckmark(
+                    value: _active == false,
+                    child: OutlinedButton(
+                      onPressed: () => setActive(false),
+                      child: const Text('UNCHECK'),
+                    ),
                   ),
-                  OutlinedButton(
-                    onPressed: () {
-                      setActive(null);
-                    },
-                    child: const Text('UNDETERMINED'),
+                  StackedCheckmark(
+                    value: _active == null,
+                    child: OutlinedButton(
+                      onPressed: () => setActive(null),
+                      child: const Text('UNDETERMINED'),
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               Wrap(
-                spacing: 5,
+                spacing: 10,
                 children: [
-                  OutlinedButton(
-                    onPressed: () => setRounded(true),
-                    child: const Text('ROUNDED'),
+                  StackedCheckmark(
+                    value: _drawCross,
+                    child: OutlinedButton(
+                      onPressed: () => setDrawCross(!_drawCross),
+                      child: const Text('DRAW CROSS'),
+                    ),
                   ),
-                  OutlinedButton(
-                    onPressed: () => setRounded(false),
-                    child: const Text('SHARPEN'),
+                  StackedCheckmark(
+                    value: _drawDash,
+                    child: OutlinedButton(
+                      onPressed: () => setDrawDash(!_drawDash),
+                      child: const Text('DRAW DASH'),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 10,
+                children: [
+                  StackedCheckmark(
+                    value: _rounded == true,
+                    child: OutlinedButton(
+                      onPressed: () => setRounded(true),
+                      child: const Text('ROUNDED'),
+                    ),
+                  ),
+                  StackedCheckmark(
+                    value: _rounded == false,
+                    child: OutlinedButton(
+                      onPressed: () => setRounded(false),
+                      child: const Text('SHARPEN'),
+                    ),
                   ),
                 ],
               ),
@@ -156,6 +211,37 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class StackedCheckmark extends StatelessWidget {
+  const StackedCheckmark({
+    super.key,
+    this.value,
+    required this.child,
+  });
+
+  final bool? value;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        child,
+        Positioned(
+          top: -8,
+          right: -8,
+          child: AnimatedCheckmark(
+            value: value,
+            color: Colors.blueGrey,
+            weight: 5,
+            size: 32,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -1,3 +1,7 @@
+## 2.2.0
+
+* Added option to draw cross and optionally draw dash.
+
 ## 2.1.0
 
 * Improved api doc

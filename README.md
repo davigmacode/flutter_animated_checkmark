@@ -12,7 +12,9 @@ Easy way to displaying, animating, and styling checkmark icon.
 
 * Animated check/uncheck/undetermined by boolean value or double value.
 * Animated color, weight, and size.
-* Rounded or sharpen style.
+* Rounded or sharpen line style.
+* Optionally draw cross for falsy value.
+* Optionally undraw dash for undetermined value.
 
 ## Usage
 
@@ -26,6 +28,8 @@ AnimatedCheckmark(
   value: true,
   size: 12,
   color: Colors.blue,
+  drawCross: true,
+  drawDash: false,
 );
 
 // animate by progress value [-1.0 to 1.0]
