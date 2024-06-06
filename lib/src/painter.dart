@@ -70,7 +70,7 @@ class CheckmarkPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..color = color
       ..strokeJoin = rounded ? StrokeJoin.round : StrokeJoin.miter
-      ..strokeCap = !rounded ? StrokeCap.butt : StrokeCap.round
+      ..strokeCap = !rounded ? StrokeCap.square : StrokeCap.round
       ..strokeWidth = weight;
 
     if (progress > 0) {
@@ -89,9 +89,9 @@ class CheckmarkPainter extends CustomPainter {
     // short side to the long side.
     const origin = Offset(0, 0);
     final Path path = Path();
-    final Offset start = Offset(size.width * 0.15, size.height * 0.45);
-    final Offset mid = Offset(size.width * 0.4, size.height * 0.7);
-    final Offset end = Offset(size.width * 0.85, size.height * 0.25);
+    final Offset start = Offset(size.width * 0.20, size.height * 0.55);
+    final Offset mid = Offset(size.width * 0.45, size.height * 0.75);
+    final Offset end = Offset(size.width * 0.80, size.height * 0.30);
     if (progress < 0.5) {
       final double strokeT = progress * 2.0;
       final Offset drawMid = Offset.lerp(start, mid, strokeT)!;
@@ -113,9 +113,9 @@ class CheckmarkPainter extends CustomPainter {
     // from the mid point outwards.
     final center = size.center(Offset.zero);
     final width = size.width;
-    final start = Offset(width * 0.15, center.dy);
+    final start = Offset(width * 0.20, center.dy);
     final mid = Offset(width * 0.5, center.dy);
-    final end = Offset(width * 0.85, center.dy);
+    final end = Offset(width * 0.80, center.dy);
     final drawStart = Offset.lerp(start, mid, 1.0 + progress)!;
     final drawEnd = Offset.lerp(mid, end, -progress)!;
     canvas.drawLine(drawStart, drawEnd, paint);
@@ -123,7 +123,7 @@ class CheckmarkPainter extends CustomPainter {
 
   void _drawCross(Canvas canvas, Size size, Paint paint) {
     // Calculate inset based on size and ratio
-    final inset = (size.width / 2) * .4;
+    final inset = (size.width / 2) * .45;
     final t = 1 - progress.abs();
 
     // Draw the \ line
