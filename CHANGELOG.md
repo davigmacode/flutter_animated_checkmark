@@ -1,3 +1,8 @@
+## 2.2.1
+
+* Use `StrokeCap.square` instead of `StrokeCap.butt` for sharpen style.
+* Adjust stroke inset.
+
 ## 2.2.0
 
 * Added option to draw cross and optionally draw dash.
