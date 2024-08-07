@@ -1,3 +1,7 @@
+## 3.1.0
+
+* Added option to remove space when there is nothing to draw
+
 ## 3.0.0
 
 * Renamed Checkmark to RawCheckmark
