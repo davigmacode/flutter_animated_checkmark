@@ -24,8 +24,9 @@ To read more about classes and other references used by `animated_checkmark`, se
 
 ```dart
 // animate by value flag
-AnimatedCheckmark(
-  value: true,
+Checkmark(
+  checked: true,
+  indeterminate: false,
   size: 12,
   color: Colors.blue,
   drawCross: true,
@@ -33,10 +34,10 @@ AnimatedCheckmark(
 );
 
 // animate by progress value [-1.0 to 1.0]
-Checkmark(
+RawCheckmark(
   progress: 0.5,
   weight: 2,
-  size: const Size.square(12),
+  size: 12,
   color: Colors.blue,
   rounded: true,
 );

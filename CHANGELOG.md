@@ -1,3 +1,9 @@
+## 3.0.0
+
+* Renamed Checkmark to RawCheckmark
+* Renamed AnimatedCheckmark to Checkmark
+* Customizable using inherited theme
+
 ## 2.2.1
 
 * Use `StrokeCap.square` instead of `StrokeCap.butt` for sharpen style.
