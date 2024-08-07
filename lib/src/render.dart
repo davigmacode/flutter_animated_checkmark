@@ -21,6 +21,7 @@ class CheckmarkRender extends ImplicitlyAnimatedWidget {
     required this.color,
     required this.weight,
     required this.size,
+    required this.autoSize,
     required this.rounded,
     required this.drawCross,
     required this.drawDash,
@@ -31,6 +32,7 @@ class CheckmarkRender extends ImplicitlyAnimatedWidget {
   final Color color;
   final double? weight;
   final double? size;
+  final bool autoSize;
   final bool rounded;
   final bool drawCross;
   final bool drawDash;
@@ -94,8 +96,15 @@ class CheckmarkRenderState extends AnimatedWidgetBaseState<CheckmarkRender> {
 
   @override
   Widget build(BuildContext context) {
+    final progressValue = progress?.evaluate(animation) ?? 0;
+    if (widget.autoSize) {
+      if ((progressValue == 0 && !widget.drawCross) ||
+          progressValue == -1 && !widget.drawDash) {
+        return const SizedBox();
+      }
+    }
     return RawCheckmark(
-      progress: progress?.evaluate(animation),
+      progress: progressValue,
       color: color?.evaluate(animation),
       weight: weight?.evaluate(animation),
       size: size?.evaluate(animation),

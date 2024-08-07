@@ -25,6 +25,12 @@ class CheckmarkThemeData extends ThemeExtension<CheckmarkThemeData>
   /// The size of the checkmark. If null, the checkmark expands to fit its parent.
   final double? size;
 
+  /// Whether to automatically size the checkmark to fit its content.
+  ///
+  /// If `true`, the checkmark will be sized to fit its content (checked, cross, or dash).
+  /// Otherwise, the `size` property will be used.
+  final bool autoSize;
+
   /// Whether the spinner's stroke is rounded.
   final bool rounded;
 
@@ -41,6 +47,7 @@ class CheckmarkThemeData extends ThemeExtension<CheckmarkThemeData>
     this.color = Colors.black,
     this.weight,
     this.size,
+    this.autoSize = true,
     this.rounded = false,
     this.drawCross = false,
     this.drawDash = true,
@@ -55,6 +62,7 @@ class CheckmarkThemeData extends ThemeExtension<CheckmarkThemeData>
         color = other?.color ?? fallback.color,
         weight = other?.weight ?? fallback.weight,
         size = other?.size ?? fallback.size,
+        autoSize = other?.autoSize ?? fallback.autoSize,
         rounded = other?.rounded ?? fallback.rounded,
         drawCross = other?.drawCross ?? fallback.drawCross,
         drawDash = other?.drawDash ?? fallback.drawDash;
@@ -68,6 +76,7 @@ class CheckmarkThemeData extends ThemeExtension<CheckmarkThemeData>
     Color? color,
     double? weight,
     double? size,
+    bool? autoSize,
     bool? rounded,
     bool? drawCross,
     bool? drawDash,
@@ -78,6 +87,7 @@ class CheckmarkThemeData extends ThemeExtension<CheckmarkThemeData>
       color: color ?? this.color,
       weight: weight ?? this.weight,
       size: size ?? this.size,
+      autoSize: autoSize ?? this.autoSize,
       rounded: rounded ?? this.rounded,
       drawCross: drawCross ?? this.drawCross,
       drawDash: drawDash ?? this.drawDash,
@@ -96,6 +106,7 @@ class CheckmarkThemeData extends ThemeExtension<CheckmarkThemeData>
       color: other.color,
       weight: other.weight,
       size: other.size,
+      autoSize: other.autoSize,
       rounded: other.rounded,
       drawCross: other.drawCross,
       drawDash: other.drawDash,
@@ -111,6 +122,7 @@ class CheckmarkThemeData extends ThemeExtension<CheckmarkThemeData>
       color: Color.lerp(color, other.color, t) ?? color,
       weight: lerpDouble(weight, other.weight, t) ?? weight,
       size: lerpDouble(size, other.size, t),
+      autoSize: t < 0.5 ? autoSize : other.autoSize,
       rounded: t < 0.5 ? rounded : other.rounded,
       drawCross: t < 0.5 ? drawCross : other.drawCross,
       drawDash: t < 0.5 ? drawDash : other.drawDash,

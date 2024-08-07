@@ -23,6 +23,7 @@ class Checkmark extends StatelessWidget {
     this.color,
     this.weight,
     this.size,
+    this.autoSize,
     this.rounded,
     this.drawCross,
     this.drawDash,
@@ -50,6 +51,14 @@ class Checkmark extends StatelessWidget {
   ///
   /// Defaults to parent size.
   final double? size;
+
+  /// Whether to automatically size the checkmark to fit its content.
+  ///
+  /// If `true`, the checkmark will be sized to fit its content (checked, cross, dash, or space).
+  /// Otherwise, the `size` property will be used.
+  ///
+  /// Defaults to `true`.
+  final bool? autoSize;
 
   /// Whether the checkmark has rounded edges.
   ///
@@ -85,6 +94,7 @@ class Checkmark extends StatelessWidget {
       color: color ?? theme.color,
       weight: weight ?? theme.weight,
       size: size ?? theme.size,
+      autoSize: autoSize ?? theme.autoSize,
       rounded: rounded ?? theme.rounded,
       drawCross: drawCross ?? theme.drawCross,
       drawDash: drawDash ?? theme.drawDash,
