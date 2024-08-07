@@ -31,14 +31,22 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   double _size = 50;
-  bool? _active = true;
+  bool _checked = true;
+  bool _indeterminate = false;
   bool _rounded = false;
   bool _drawCross = false;
   bool _drawDash = true;
   Color? _color;
 
-  void setActive(bool? value) {
-    setState(() => _active = value);
+  void setChecked(bool value) {
+    setState(() {
+      _checked = value;
+      _indeterminate = false;
+    });
+  }
+
+  void setIndeterminate() {
+    setState(() => _indeterminate = true);
   }
 
   void setRounded(bool value) {
@@ -89,10 +97,11 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               ColoredBox(
                 color: Colors.yellow.shade100,
-                child: AnimatedCheckmark(
+                child: Checkmark(
                   duration: const Duration(milliseconds: 250),
                   curve: Curves.linear,
-                  value: _active,
+                  checked: _checked,
+                  indeterminate: _indeterminate,
                   size: _size,
                   color: _color,
                   rounded: _rounded,
@@ -116,24 +125,24 @@ class _MyHomePageState extends State<MyHomePage> {
                 spacing: 10,
                 children: [
                   StackedCheckmark(
-                    value: _active == true,
+                    checked: !_indeterminate && _checked,
                     child: OutlinedButton(
-                      onPressed: () => setActive(true),
+                      onPressed: () => setChecked(true),
                       child: const Text('CHECK'),
                     ),
                   ),
                   StackedCheckmark(
-                    value: _active == false,
+                    checked: !_indeterminate && !_checked,
                     child: OutlinedButton(
-                      onPressed: () => setActive(false),
+                      onPressed: () => setChecked(false),
                       child: const Text('UNCHECK'),
                     ),
                   ),
                   StackedCheckmark(
-                    value: _active == null,
+                    checked: _indeterminate,
                     child: OutlinedButton(
-                      onPressed: () => setActive(null),
-                      child: const Text('UNDETERMINED'),
+                      onPressed: () => setIndeterminate(),
+                      child: const Text('INDETERMINATE'),
                     ),
                   ),
                 ],
@@ -143,14 +152,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 spacing: 10,
                 children: [
                   StackedCheckmark(
-                    value: _drawCross,
+                    checked: _drawCross,
                     child: OutlinedButton(
                       onPressed: () => setDrawCross(!_drawCross),
                       child: const Text('DRAW CROSS'),
                     ),
                   ),
                   StackedCheckmark(
-                    value: _drawDash,
+                    checked: _drawDash,
                     child: OutlinedButton(
                       onPressed: () => setDrawDash(!_drawDash),
                       child: const Text('DRAW DASH'),
@@ -163,14 +172,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 spacing: 10,
                 children: [
                   StackedCheckmark(
-                    value: _rounded == true,
+                    checked: _rounded == true,
                     child: OutlinedButton(
                       onPressed: () => setRounded(true),
                       child: const Text('ROUNDED'),
                     ),
                   ),
                   StackedCheckmark(
-                    value: _rounded == false,
+                    checked: _rounded == false,
                     child: OutlinedButton(
                       onPressed: () => setRounded(false),
                       child: const Text('SHARPEN'),
@@ -197,10 +206,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       clipBehavior: Clip.antiAlias,
                       child: InkWell(
                         onTap: () => setColor(color),
-                        child: AnimatedCheckmark(
+                        child: Checkmark(
                           weight: 4,
                           color: Colors.white70,
-                          value: _color == color,
+                          checked: _color == color,
                         ),
                       ),
                     );
@@ -218,11 +227,11 @@ class _MyHomePageState extends State<MyHomePage> {
 class StackedCheckmark extends StatelessWidget {
   const StackedCheckmark({
     super.key,
-    this.value,
+    required this.checked,
     required this.child,
   });
 
-  final bool? value;
+  final bool checked;
   final Widget child;
 
   @override
@@ -234,8 +243,8 @@ class StackedCheckmark extends StatelessWidget {
         Positioned(
           top: -8,
           right: -8,
-          child: AnimatedCheckmark(
-            value: value,
+          child: Checkmark(
+            checked: checked,
             color: Colors.blueGrey,
             weight: 5,
             size: 32,
