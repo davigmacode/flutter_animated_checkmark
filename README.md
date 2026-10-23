@@ -1,3 +1,7 @@
+# animated_checkmark
+
+> [!IMPORTANT]
+> **Repository Moved to Monorepo**: Active development of $(System.Collections.Hashtable.Name) has migrated to the official [**davigmacode/flutter_wx**](https://github.com/davigmacode/flutter_wx) monorepo under [packages/animated_checkmark](https://github.com/davigmacode/flutter_wx/tree/main/packages/animated_checkmark).
 [![Pub Version](https://img.shields.io/pub/v/animated_checkmark)](https://pub.dev/packages/animated_checkmark) ![GitHub](https://img.shields.io/github/license/davigmacode/flutter_animated_checkmark) [![GitHub](https://badgen.net/badge/icon/buymeacoffee?icon=buymeacoffee&color=yellow&label)](https://www.buymeacoffee.com/davigmacode) [![GitHub](https://badgen.net/badge/icon/ko-fi?icon=kofi&color=red&label)](https://ko-fi.com/davigmacode)
 
 Easy way to displaying, animating, and styling checkmark icon.
